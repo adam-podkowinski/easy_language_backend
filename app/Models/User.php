@@ -23,6 +23,7 @@ class User extends Authenticatable
         'is_startup',
         'theme_mode',
         'native_language',
+        'is_admin'
     ];
 
     /**

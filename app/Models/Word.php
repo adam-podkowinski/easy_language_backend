@@ -13,10 +13,13 @@ class Word extends Model
         'word_foreign',
         'word_translation',
         'learning_status',
-        'times_reviewed'
+        'times_reviewed',
+        'language',
+        'user_id'
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

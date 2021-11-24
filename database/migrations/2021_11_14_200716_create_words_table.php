@@ -17,8 +17,9 @@ class CreateWordsTable extends Migration
             $table->id();
             $table->string('word_foreign');
             $table->string('word_translation');
-            $table->string('learning_status');
-            $table->integer('times_reviewed')->unsigned();
+            $table->string('language');
+            $table->string('learning_status')->default('reviewing');
+            $table->integer('times_reviewed')->unsigned()->default(0);
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();

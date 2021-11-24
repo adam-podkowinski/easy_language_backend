@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_startup')->default(true);
             $table->string('theme_mode')->default('System');
             $table->string('native_language')->default('en-US');
+            $table->boolean('is_admin')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Models\Word;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -25,6 +27,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('access-word', function (User $user, Word $word) {
+            return $user->is_admin || ($user->id === $word->user_id);
+        });
+
+        Gate::define('access-user', function (User $user, User $secondUser) {
+            return $user->is_admin || ($user->id === $secondUser->id);
+        });
     }
 }
