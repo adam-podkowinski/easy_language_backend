@@ -14,12 +14,18 @@ class Word extends Model
         'word_translation',
         'learning_status',
         'times_reviewed',
-        'language',
-        'user_id'
+        'order_index',
+        'user_id',
+        'dictionary_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function dictionary()
+    {
+        return $this->belongsTo(Dictionary::class);
     }
 }

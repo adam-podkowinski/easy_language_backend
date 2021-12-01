@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Word;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class WordsController extends Controller
@@ -23,7 +24,7 @@ class WordsController extends Controller
         if ($request->get('language') == null) {
             return auth()->user()->words;
         } else {
-            return Word::whereUserId(auth()->user()->id)->whereLanguage($request->get('language'))->get();
+            return Word::whereUserId(auth()->user()->id)->where('language', $request->get('language'))->get();
         }
     }
 
@@ -69,6 +70,21 @@ class WordsController extends Controller
         }
 
         return $word->update($request->except(['user_id']));
+    }
+
+    public function updateBulk(Request $request)
+    {
+        foreach ($request->all() as $word) {
+            $wordToUpdate = auth()->user()->words->where('id', $word['id'])->first();
+
+            if (empty($wordToUpdate)) {
+                return response(['error' => 'no words to update'], 404);
+            }
+
+            $wordToUpdate->update(Arr::except($word, ['user_id']));
+        }
+
+        return auth()->user()->words;
     }
 
     public function destroyWordBank(Request $request)

@@ -17,11 +17,13 @@ class CreateWordsTable extends Migration
             $table->id();
             $table->string('word_foreign');
             $table->string('word_translation');
-            $table->string('language');
             $table->string('learning_status')->default('reviewing');
             $table->integer('times_reviewed')->unsigned()->default(0);
-            $table->bigInteger('user_id')->unsigned();
+            $table->foreignId('dictionary_id');
+            $table->foreignId('user_id');
+            $table->integer('order_index')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('dictionary_id')->references('id')->on('dictionaries')->cascadeOnDelete();
             $table->timestamps();
         });
     }
