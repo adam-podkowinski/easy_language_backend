@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dictionary;
 use App\Models\Word;
 use Gate;
 use Illuminate\Http\Request;
@@ -73,12 +74,18 @@ class WordsController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, ?Word $wordArg)
     {
-        $word = Word::find($id);
+        $word = $wordArg ?? Word::find($id);
 
         if (!Gate::allows('access-word', $word)) {
             return response(['error' => 'forbidden'], 403);
+        }
+
+        if ($request['dictionary_id'] != null) {
+            if (!Gate::allows('access-dictionary', Dictionary::find($request['dictionary_id']))) {
+                return response(['error' => 'invalid dictionary id']);
+            }
         }
 
         return $word->update($request->except(['user_id']));
@@ -93,25 +100,10 @@ class WordsController extends Controller
                 return response(['error' => 'no words to update'], 404);
             }
 
-            $wordToUpdate->update(Arr::except($word, ['user_id']));
+            $this->update(Arr::except($word, ['user_id']), $wordToUpdate->id, $wordToUpdate);
         }
 
         return auth()->user()->words;
-    }
-
-    public function destroyWordBank(Request $request)
-    {
-        $wordsToDelete = Word::whereUserId(auth()->user()->id)->whereLanguage($request->get('language'))->get();
-
-        if (count($wordsToDelete) <= 0) {
-            return response(['error' => 'no words to delete'], 404);
-        }
-
-        foreach ($wordsToDelete as $word) {
-            $word->delete();
-        }
-
-        return response(['success' => 'words deleted']);
     }
 
     public function destroy($id)

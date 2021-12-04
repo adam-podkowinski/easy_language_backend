@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Dictionary;
 use App\Models\User;
 use App\Models\Word;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -33,6 +34,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('access-user', function (User $user, User $secondUser) {
             return $user->is_admin || ($user->id === $secondUser->id);
+        });
+
+        Gate::define('access-dictionary', function (User $user, Dictionary $dictionary) {
+            return $user->is_admin || ($user->id === $dictionary->user_id);
         });
     }
 }

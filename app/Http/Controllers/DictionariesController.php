@@ -28,6 +28,11 @@ class DictionariesController extends Controller
         return auth()->user()->dictionaries->where('language', $language);
     }
 
+    public function showWords(string $language)
+    {
+        return auth()->user()->dictionaries->where('language', $language)->first()->words;
+    }
+
     public function store(Request $request)
     {
         $user = auth()->user();

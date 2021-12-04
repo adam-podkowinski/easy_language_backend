@@ -17,13 +17,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/', [DictionariesController::class, 'store']);
 
             Route::get('/{language}', [DictionariesController::class, 'show']);
+            Route::get('/{language}/words', [DictionariesController::class, 'showWords']);
         });
 
         // Words
         Route::prefix('/words')->group(function () {
             Route::get('/', [WordsController::class, 'index']);
             Route::post('/', [WordsController::class, 'store']);
-            Route::delete('/', [WordsController::class, 'destroyWordBank']);
             Route::put('/', [WordsController::class, 'updateBulk']);
 
             Route::get('/{id}', [WordsController::class, 'show']);
