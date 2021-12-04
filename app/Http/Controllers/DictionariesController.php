@@ -85,6 +85,10 @@ class DictionariesController extends Controller
     {
         $dict = $this->findDictFromIdOrISO($lang);
 
+        if (empty($dict)) {
+            return response('not found dictionary', 404);
+        }
+
         if (!Gate::allows('access-dictionary', $dict)) {
             return response(['error' => 'forbidden'], 403);
         }
@@ -95,10 +99,10 @@ class DictionariesController extends Controller
     private function findDictFromIdOrISO($lang)
     {
         $dict = null;
-        if (gettype($lang) == 'string') {
+        if (intval($lang) == 0) {
             $dict = auth()->user()->dictionaries->where('language', $lang)->first();
         } else {
-            $dict = Dictionary::find($lang);
+            $dict = auth()->user()->dictionaries->where('id', $lang)->first();
         }
 
         return $dict;
