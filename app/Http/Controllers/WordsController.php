@@ -41,7 +41,9 @@ class WordsController extends Controller
 
     public function store(Request $request)
     {
-        if (!auth()->user()) {
+        $user = auth()->user();
+
+        if (empty($user)) {
             return response(['error' => 'forbidden'], 403);
         }
 
@@ -49,7 +51,15 @@ class WordsController extends Controller
             'word_foreign' => 'required|string',
             'word_translation' => 'required|string',
             'language' => 'required|string',
+            'dictionary_id' => 'required',
+            'order_index' => 'required|int',
         ]);
+
+        $dict = $user->dictionaries->where('id', $request['dictionary_id']);
+
+        if (count($dict) <= 0) {
+            return response(['error' => 'dictionary doesnt exist'], 400);
+        }
 
         return Word::create([
             'word_foreign' => $request['word_foreign'],
@@ -57,6 +67,8 @@ class WordsController extends Controller
             'language' => $request['language'],
             'learning_status' => $request['learning_status'] ?? 'reviewing',
             'times_reviewed' => $request['times_reviewed'] ?? 0,
+            'dictionary_id' => $request['dictionary_id'],
+            'order_index' => $request['order_index'],
             'user_id' => auth()->user()->id,
         ]);
     }

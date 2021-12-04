@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Word::class);
     }
+
+    public function dictionaries()
+    {
+        return $this->hasMany(Dictionary::class);
+    }
 }

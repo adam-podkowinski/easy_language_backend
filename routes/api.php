@@ -1,10 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DictionariesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WordsController;
-use App\Models\Dictionary;
-use App\Models\Word;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -12,12 +11,15 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('/v1')->group(function () {
-        // Words
-        Route::get('/dictionary', function () {
-            return Dictionary::first()->words()->get();
-//            return Word::whereId(10)->first()->dictionary()->first();
+        // Dictionaries
+        Route::prefix('/dictionaries')->group(function () {
+            Route::get('/', [DictionariesController::class, 'index']);
+            Route::post('/', [DictionariesController::class, 'store']);
+
+            Route::get('/{language}', [DictionariesController::class, 'show']);
         });
 
+        // Words
         Route::prefix('/words')->group(function () {
             Route::get('/', [WordsController::class, 'index']);
             Route::post('/', [WordsController::class, 'store']);
