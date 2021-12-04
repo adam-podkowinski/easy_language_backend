@@ -114,6 +114,6 @@ class WordsController extends Controller
             return response(['error' => 'forbidden'], 403);
         }
 
-        return Word::destroy($id);
+        return $word->delete();
     }
 }

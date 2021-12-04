@@ -2,35 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DictionaryResource;
 use App\Models\Dictionary;
-use App\Models\Word;
+use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class DictionariesController extends Controller
 {
     public function all()
     {
         if (Auth::user()->is_admin) {
-            return Word::all();
+            return Dictionary::all();
         } else {
-            return auth()->user()->words;
+            return auth()->user()->dictionaries;
         }
     }
 
-    public function index(Request $request)
+    public function allWords()
+    {
+        $returnArray = [];
+
+        foreach (auth()->user()->dictionaries as $dict) {
+            array_push($returnArray, new DictionaryResource($dict));
+        }
+
+        return $returnArray;
+    }
+
+    public function index()
     {
         return auth()->user()->dictionaries;
     }
 
-    public function show(string $language)
+    public function show($lang)
     {
-        return auth()->user()->dictionaries->where('language', $language);
+        $dict = $this->findDictFromIdOrISO($lang);
+
+        if (empty($dict)) {
+            return response('not found dictionary', 404);
+        }
+
+        return $dict;
     }
 
-    public function showWords(string $language)
+    public function showWords($lang)
     {
-        return auth()->user()->dictionaries->where('language', $language)->first()->words;
+        $dict = $this->findDictFromIdOrISO($lang);
+
+        if (empty($dict)) {
+            return response('not found dictionary', 404);
+        }
+
+        return new DictionaryResource($dict);
     }
 
     public function store(Request $request)
@@ -42,12 +67,40 @@ class DictionariesController extends Controller
         }
 
         $request->validate([
-            'language' => 'required|string',
-        ]);
+                'language' => [
+                    'required',
+                    'string',
+                    Rule::unique('dictionaries')->where('user_id', auth()->user()->id)
+                ],
+            ]
+        );
 
         return Dictionary::create([
             'language' => $request['language'],
             'user_id' => $user->id,
         ]);
+    }
+
+    public function destroy($lang)
+    {
+        $dict = $this->findDictFromIdOrISO($lang);
+
+        if (!Gate::allows('access-dictionary', $dict)) {
+            return response(['error' => 'forbidden'], 403);
+        }
+
+        return $dict->delete();
+    }
+
+    private function findDictFromIdOrISO($lang)
+    {
+        $dict = null;
+        if (gettype($lang) == 'string') {
+            $dict = auth()->user()->dictionaries->where('language', $lang)->first();
+        } else {
+            $dict = Dictionary::find($lang);
+        }
+
+        return $dict;
     }
 }

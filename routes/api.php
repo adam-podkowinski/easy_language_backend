@@ -14,10 +14,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         // Dictionaries
         Route::prefix('/dictionaries')->group(function () {
             Route::get('/', [DictionariesController::class, 'index']);
-            Route::post('/', [DictionariesController::class, 'store']);
+            Route::get('/words', [DictionariesController::class, 'allWords']);
 
             Route::get('/{language}', [DictionariesController::class, 'show']);
             Route::get('/{language}/words', [DictionariesController::class, 'showWords']);
+
+            Route::post('/', [DictionariesController::class, 'store']);
+            Route::delete('/{language}', [DictionariesController::class, 'destroy']);
         });
 
         // Words
