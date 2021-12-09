@@ -40,7 +40,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::put('/', [UserController::class, 'update']);
 
             Route::get('/dictionary', [UserController::class, 'currentDictionary']);
-            Route::get('/native', [UserController::class, 'nativeLanguage']);
         });
 
         // Admin

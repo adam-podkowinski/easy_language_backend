@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
-class DictionaryResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,8 +19,8 @@ class DictionaryResource extends JsonResource
     {
         return [
             'data' => [
-                'dictionary' => parent::toArray($request),
-                'words' => $this['words'],
+                'user' => parent::toArray($request),
+                'current_dictionary' => $this['currentDictionary'],
             ],
         ];
     }

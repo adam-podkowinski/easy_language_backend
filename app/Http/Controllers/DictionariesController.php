@@ -80,7 +80,7 @@ class DictionariesController extends Controller
             'user_id' => $user->id,
         ]);
 
-        $user->update(['current_dictionary_id'=>$dict->id]);
+        $user->update(['current_dictionary_id' => $dict->id]);
 
         return $dict;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\Dictionary;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        return auth()->user();
+        return new UserResource(auth()->user());
     }
 
     public function all()
@@ -20,14 +21,14 @@ class UserController extends Controller
         if (Auth::user()->is_admin) {
             return User::all();
         } else {
-            return auth()->user();
+            return new UserResource(auth()->user());
         }
     }
 
     public function show($id)
     {
         if (Auth::user()->is_admin || $id == Auth::user()->id) {
-            return User::find($id);
+            return new UserResource(User::find($id));
         } else {
             return response(['error' => 'unauthenticated'], 401);
         }
@@ -61,7 +62,8 @@ class UserController extends Controller
                 return response(['error' => 'invalid dictionary id']);
             }
         }
+        $user->update($request->except(['password', 'is_admin']));
 
-        return $user->update($request->except(['password', 'is_admin']));
+        return new UserResource($user);
     }
 }
