@@ -37,6 +37,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         // User
         Route::prefix('/user')->group(function () {
             Route::get('/', [UserController::class, 'index']);
+            Route::put('/', [UserController::class, 'update']);
+
+            Route::get('/dictionary', [UserController::class, 'currentDictionary']);
+            Route::get('/native', [UserController::class, 'nativeLanguage']);
         });
 
         // Admin

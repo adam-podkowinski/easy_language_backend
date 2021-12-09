@@ -100,7 +100,7 @@ class WordsController extends Controller
                 return response(['error' => 'no words to update'], 404);
             }
 
-            $this->update(Arr::except($word, ['user_id']), $wordToUpdate->id, $wordToUpdate);
+            $this->update($word, $wordToUpdate->id, $wordToUpdate);
         }
 
         return auth()->user()->words;

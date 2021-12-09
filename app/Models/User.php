@@ -23,6 +23,7 @@ class User extends Authenticatable
         'is_startup',
         'theme_mode',
         'native_language',
+        'current_dictionary_id',
         'is_admin'
     ];
 
@@ -53,5 +54,10 @@ class User extends Authenticatable
     public function dictionaries()
     {
         return $this->hasMany(Dictionary::class);
+    }
+
+    public function currentDictionary()
+    {
+        return $this->hasOne(Dictionary::class, 'id', 'current_dictionary_id');
     }
 }

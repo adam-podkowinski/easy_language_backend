@@ -60,10 +60,10 @@ class DictionariesController extends Controller
 
     public function store(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if (empty($user)) {
-            return response(['error' => 'forbidden'], 403);
+            return response(['error' => 'unauthenticated'], 403);
         }
 
         $request->validate([
@@ -75,10 +75,14 @@ class DictionariesController extends Controller
             ]
         );
 
-        return Dictionary::create([
+        $dict = Dictionary::create([
             'language' => $request['language'],
             'user_id' => $user->id,
         ]);
+
+        $user->update(['current_dictionary_id'=>$dict->id]);
+
+        return $dict;
     }
 
     public function destroy($lang)
