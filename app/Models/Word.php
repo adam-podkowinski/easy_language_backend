@@ -14,7 +14,6 @@ class Word extends Model
         'word_translation',
         'learning_status',
         'times_reviewed',
-        'order_index',
         'user_id',
         'dictionary_id',
     ];

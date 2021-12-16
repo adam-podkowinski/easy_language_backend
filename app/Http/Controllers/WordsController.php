@@ -53,7 +53,6 @@ class WordsController extends Controller
             'word_translation' => 'required|string',
             'language' => 'required|string',
             'dictionary_id' => 'required',
-            'order_index' => 'required|int',
         ]);
 
         $dict = $user->dictionaries->where('id', $request['dictionary_id']);
@@ -69,7 +68,6 @@ class WordsController extends Controller
             'learning_status' => $request['learning_status'] ?? 'reviewing',
             'times_reviewed' => $request['times_reviewed'] ?? 0,
             'dictionary_id' => $request['dictionary_id'],
-            'order_index' => $request['order_index'],
             'user_id' => auth()->user()->id,
         ]);
     }

@@ -32,7 +32,7 @@ class AuthController extends Controller
             'token' => $token,
         ];
 
-        $response =  array_merge($response, (new UserResource($user))->toArray($user));
+        $response =  array_merge($response, $user->toArray());
 
         return response($response, 201);
     }
@@ -58,7 +58,7 @@ class AuthController extends Controller
             'token' => $token,
         ];
 
-        $response =  array_merge($response, (new UserResource($user))->toArray($user));
+        $response =  array_merge($response, (new UserResource($user))->fromMap($user));
 
         return response($response, 201);
     }
