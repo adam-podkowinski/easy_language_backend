@@ -13,6 +13,6 @@ class Dictionary extends Model
 
     public function words()
     {
-        return $this->hasMany(Word::class);
+        return $this->hasMany(Word::class)->orderBy('updated_at', 'desc');
     }
 }
