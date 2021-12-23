@@ -44,7 +44,7 @@ class DictionariesController extends Controller
             return response('not found dictionary', 404);
         }
 
-        return $dict;
+        return new DictionaryResource($dict);
     }
 
     public function showWords($lang)
@@ -82,7 +82,7 @@ class DictionariesController extends Controller
 
         $user->update(['current_dictionary_id' => $dict->id]);
 
-        return $dict;
+        return new DictionaryResource($dict);
     }
 
     public function destroy($lang)

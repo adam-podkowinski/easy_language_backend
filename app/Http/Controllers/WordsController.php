@@ -66,9 +66,9 @@ class WordsController extends Controller
             'word_translation' => $request['word_translation'],
             'language' => $request['language'],
             'learning_status' => $request['learning_status'] ?? 'reviewing',
-            'times_reviewed' => $request['times_reviewed'] ?? 0,
-            'dictionary_id' => $request['dictionary_id'],
-            'user_id' => auth()->user()->id,
+            'times_reviewed' => (int)$request['times_reviewed'] ?? 0,
+            'dictionary_id' => (int)$request['dictionary_id'] ?? 0,
+            'user_id' => (int)auth()->user()->id,
         ]);
     }
 

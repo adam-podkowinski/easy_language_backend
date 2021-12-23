@@ -20,7 +20,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_startup',
         'theme_mode',
         'native_language',
         'current_dictionary_id',

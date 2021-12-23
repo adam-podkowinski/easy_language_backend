@@ -16,13 +16,11 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean('is_startup')->default(true);
             $table->string('theme_mode')->default('System');
-            $table->string('native_language')->default('en-US');
+            $table->string('native_language')->default('en');
             $table->foreignIdFor(Dictionary::class, 'current_dictionary_id')->default(0);
             $table->boolean('is_admin')->default(false);
             $table->rememberToken();
