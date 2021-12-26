@@ -6,8 +6,8 @@ use App\Models\Dictionary;
 use App\Models\Word;
 use Gate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 class WordsController extends Controller
 {
@@ -55,11 +55,13 @@ class WordsController extends Controller
             'dictionary_id' => 'required',
         ]);
 
-        $dict = $user->dictionaries->where('id', $request['dictionary_id']);
+        $dicts = $user->dictionaries->where('id', $request['dictionary_id']);
 
-        if (count($dict) <= 0) {
+        if (count($dicts) <= 0) {
             return response(['error' => 'dictionary doesnt exist'], 400);
         }
+
+        $dicts->first()->touch();
 
         return Word::create([
             'word_foreign' => $request['word_foreign'],
@@ -72,7 +74,7 @@ class WordsController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id, ?Word $wordArg)
+    public function update($array, $id, ?Word $wordArg)
     {
         $word = $wordArg ?? Word::find($id);
 
@@ -80,28 +82,17 @@ class WordsController extends Controller
             return response(['error' => 'forbidden'], 403);
         }
 
-        if ($request['dictionary_id'] != null) {
-            if (!Gate::allows('access-dictionary', Dictionary::find($request['dictionary_id']))) {
+        if ($array['dictionary_id'] != null) {
+            if (!Gate::allows('access-dictionary', Dictionary::find($array['dictionary_id']))) {
                 return response(['error' => 'invalid dictionary id']);
             }
         }
 
-        return $word->update($request->except(['user_id']));
-    }
+        $dict = $word->dictionary;
 
-    public function updateBulk(Request $request)
-    {
-        foreach ($request->all() as $word) {
-            $wordToUpdate = auth()->user()->words->where('id', $word['id'])->first();
+        $dict->touch();
 
-            if (empty($wordToUpdate)) {
-                return response(['error' => 'no words to update'], 404);
-            }
-
-            $this->update($word, $wordToUpdate->id, $wordToUpdate);
-        }
-
-        return auth()->user()->words;
+        return $word->update(Arr::except($array, ['user_id']));
     }
 
     public function destroy($id)
@@ -111,6 +102,10 @@ class WordsController extends Controller
         if (!Gate::allows('access-word', $word)) {
             return response(['error' => 'forbidden'], 403);
         }
+
+        $dict = $word->dictionary;
+
+        $dict->touch();
 
         return $word->delete();
     }

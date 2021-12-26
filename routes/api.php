@@ -32,7 +32,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('/words')->group(function () {
             Route::get('/', [WordsController::class, 'index']);
             Route::post('/', [WordsController::class, 'store']);
-            Route::put('/', [WordsController::class, 'updateBulk']);
 
             Route::get('/{id}', [WordsController::class, 'show']);
             Route::put('/{id}', [WordsController::class, 'update']);
