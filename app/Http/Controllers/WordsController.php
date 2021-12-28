@@ -74,7 +74,7 @@ class WordsController extends Controller
         ]);
     }
 
-    public function update($array, $id, ?Word $wordArg)
+    public function update(Request $request, $id)
     {
         $word = $wordArg ?? Word::find($id);
 
@@ -82,8 +82,8 @@ class WordsController extends Controller
             return response(['error' => 'forbidden'], 403);
         }
 
-        if ($array['dictionary_id'] != null) {
-            if (!Gate::allows('access-dictionary', Dictionary::find($array['dictionary_id']))) {
+        if ($request['dictionary_id'] != null) {
+            if (!Gate::allows('access-dictionary', Dictionary::find($request['dictionary_id']))) {
                 return response(['error' => 'invalid dictionary id']);
             }
         }
@@ -92,7 +92,9 @@ class WordsController extends Controller
 
         $dict->touch();
 
-        return $word->update(Arr::except($array, ['user_id']));
+        $word->update($request->except(['user_id']));
+
+        return $word;
     }
 
     public function destroy($id)

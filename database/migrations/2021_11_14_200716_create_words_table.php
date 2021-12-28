@@ -21,8 +21,8 @@ class CreateWordsTable extends Migration
             $table->string('word_translation');
             $table->string('learning_status')->default('reviewing');
             $table->integer('times_reviewed')->unsigned()->default(0);
-            $table->foreignIdFor(Dictionary::class);
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Dictionary::class)->type('integer');
+            $table->foreignIdFor(User::class)->type('integer');
             $table->timestamps();
         });
     }
