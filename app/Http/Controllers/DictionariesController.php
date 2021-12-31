@@ -58,6 +58,18 @@ class DictionariesController extends Controller
         return new DictionaryResource($dict);
     }
 
+    public function update(Request $request, $id) {
+        $dict = Dictionary::find($id);
+
+        if (!Gate::allows('access-dictionary', $dict)) {
+            return response(['error' => 'forbidden'], 403);
+        }
+
+        $dict->update($request->except(['user_id']));
+
+        return $dict;
+    }
+
     public function store(Request $request)
     {
         $user = Auth::user();

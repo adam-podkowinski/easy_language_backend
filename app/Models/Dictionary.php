@@ -9,7 +9,7 @@ class Dictionary extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['language', 'user_id'];
+    protected $fillable = ['language', 'user_id', 'flashcard_id'];
 
     public function words()
     {

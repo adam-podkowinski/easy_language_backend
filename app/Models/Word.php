@@ -16,6 +16,7 @@ class Word extends Model
         'times_reviewed',
         'user_id',
         'dictionary_id',
+        'is_turned',
     ];
 
     public function user()

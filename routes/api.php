@@ -26,6 +26,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
             Route::post('/', [DictionariesController::class, 'store']);
             Route::delete('/{language}', [DictionariesController::class, 'destroy']);
+
+            Route::put('/{id}', [DictionariesController::class, 'update']);
         });
 
         // Words

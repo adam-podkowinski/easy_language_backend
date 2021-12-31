@@ -20,6 +20,7 @@ class ForeignKeys extends Migration
 
         Schema::table('dictionaries', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('flashcard_id')->references('id')->on('words');
         });
     }
 }
