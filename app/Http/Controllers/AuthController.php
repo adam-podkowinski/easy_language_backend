@@ -47,7 +47,7 @@ class AuthController extends Controller
 
         // Check password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response(['message' => 'Bad creds'], 401);
+            return response(['message' => 'Invalid e-mail or password'], 401);
         }
 
         $token = $user->createToken('laravel-sanctum-api')->plainTextToken;

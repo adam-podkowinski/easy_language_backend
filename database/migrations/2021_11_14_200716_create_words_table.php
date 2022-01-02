@@ -21,7 +21,6 @@ class CreateWordsTable extends Migration
             $table->string('word_translation');
             $table->string('learning_status')->default('reviewing');
             $table->integer('times_reviewed')->unsigned()->default(0);
-            $table->boolean('is_turned')->default(false);
             $table->foreignIdFor(Dictionary::class);
             $table->foreignIdFor(User::class);
             $table->timestamps();
