@@ -15,6 +15,7 @@ class Word extends Model
         'learning_status',
         'times_reviewed',
         'user_id',
+        'favorite',
         'dictionary_id',
     ];
 

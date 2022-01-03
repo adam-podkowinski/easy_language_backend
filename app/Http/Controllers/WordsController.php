@@ -7,7 +7,6 @@ use App\Models\Word;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Arr;
 
 class WordsController extends Controller
 {

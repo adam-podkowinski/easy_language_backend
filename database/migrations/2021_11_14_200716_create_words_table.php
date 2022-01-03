@@ -23,6 +23,7 @@ class CreateWordsTable extends Migration
             $table->integer('times_reviewed')->unsigned()->default(0);
             $table->foreignIdFor(Dictionary::class);
             $table->foreignIdFor(User::class);
+            $table->boolean('favorite')->default(false);
             $table->timestamps();
         });
     }
