@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -14,13 +13,17 @@ class AuthController extends Controller
     {
         $fields = $request->validate([
             'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string|confirmed',
+            'theme_mode' => 'string',
+            'native_language' => 'string',
         ]);
 
         $user = User::create(
             [
                 'email' => $fields['email'],
-                'password' => bcrypt($fields['password'])
+                'password' => bcrypt($fields['password']),
+                'theme_mode' => $fields['theme_mode'] ?? 'System',
+                'native_language' => $fields['native_language'] ?? 'en',
             ]
         );
 
@@ -30,7 +33,8 @@ class AuthController extends Controller
             'token' => $token,
         ];
 
-        $response =  array_merge($response, (new UserResource($user))->toArray($user));
+        /** @var Request $user */
+        $response = array_merge($response, (new UserResource($user))->toArray($user));
 
         return response($response, 201);
     }
@@ -56,7 +60,7 @@ class AuthController extends Controller
             'token' => $token,
         ];
 
-        $response =  array_merge($response, (new UserResource($user))->toArray($user));
+        $response = array_merge($response, (new UserResource($user))->toArray($user));
 
         return response($response, 201);
     }
