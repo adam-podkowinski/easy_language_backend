@@ -6,6 +6,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -72,5 +73,24 @@ class AuthController extends Controller
         return [
             'message' => 'Logged out successfully'
         ];
+    }
+
+    public function removeAccount(Request $request)
+    {
+        $user = Auth::user();
+
+        $fields = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        // Check password
+        if (!$user || !Hash::check($fields['password'], $user->password) || $fields['email'] != $user->email) {
+            return response(['message' => 'Invalid e-mail or password', 'success' => false], 401);
+        }
+
+        $user->delete();
+
+        return response(['message' => 'User deleted successfully.', 'success' => true]);
     }
 }

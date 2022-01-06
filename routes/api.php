@@ -44,6 +44,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('/user')->group(function () {
             Route::get('/', [UserController::class, 'index']);
             Route::put('/', [UserController::class, 'update']);
+            Route::delete('/', [AuthController::class, 'removeAccount']);
 
             Route::get('/dictionary', [UserController::class, 'currentDictionary']);
         });
